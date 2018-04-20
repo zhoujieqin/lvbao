@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ater.lvbao.modules.dao.SysLogDao">
+
+	<select id="queryObject" resultType="com.ater.lvbao.modules.entity.SysLogEntity">
+		select * from sys_log where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.ater.lvbao.modules.entity.SysLogEntity">
+		select * from sys_log
+		<where>
+			<if test="userName != null and userName.trim() != ''">
+				and `user_name` like concat('%',#{userName},'%')
+			</if>
+			<if test="operationTimeStart != null and operationTimeStart.trim() != '' and operationTimeEnd != null and operationTimeEnd.trim() != ''">
+				and `operation_time` between #{operationTimeStart} and #{operationTimeEnd}
+			</if>
+			<if test="operationContent != null and operationContent.trim() != ''">
+				and `operation_content` like concat('%',#{operationContent},'%')
+			</if>
+		</where>
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sys_log
+		<where>
+			<if test="userName != null and userName.trim() != ''">
+				and `user_name` like concat('%',#{userName},'%')
+			</if>
+			<if test="operationTimeStart != null and operationTimeStart.trim() != '' and operationTimeEnd != null and operationTimeEnd.trim() != ''">
+				and `operation_time` between #{operationTimeStart} and #{operationTimeEnd}
+			</if>
+			<if test="operationContent != null and operationContent.trim() != ''">
+				and `operation_content` like concat('%',#{operationContent},'%')
+			</if>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="com.ater.lvbao.modules.entity.SysLogEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_log
+		(
+			`user_name`,
+			`operation_time`,
+			`operation_content`,
+			`execute_phase`,
+			`user_ip`
+		)
+		values
+		(
+			#{userName},
+			#{operationTime},
+			#{operationContent},
+			#{executePhase},
+			#{userIp}
+		)
+	</insert>
+
+</mapper>

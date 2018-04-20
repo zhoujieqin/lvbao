@@ -1,0 +1,905 @@
+swagger: '2.0'
+info:
+  description: 分账系统接口文档
+  version: 1.0.0
+  title: 分账系统
+
+basePath: /ledger
+
+schemes:
+  - http
+
+#认证
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "token"
+    in: "header"
+
+#定义接口数据
+paths:
+  /sys/login:
+    post:
+      tags:
+        - 用户登录
+      summary: 登录
+      produces:
+        - application/json
+      parameters:
+        - name: username
+          description: 用户名
+          in: query
+          type: string
+          required: true
+        - name: password
+          description: 密码
+          in: query
+          type: string
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Login'
+  /sys/logout:
+      post:
+        tags:
+          - 用户登录
+        summary: 退出
+        produces:
+          - application/json
+        parameters:
+          - name: token
+            description: TOKEN
+            in: header
+            type: string
+            required: true
+        responses:
+          '200':
+            schema:
+              $ref: '#/definitions/R'
+  /sys/log/list:
+    get:
+      tags:
+        - 系统日志
+      summary: 日志列表
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: page
+          description: 页码
+          in: query
+          type: integer
+          required: true
+        - name: limit
+          description: 每页条数
+          in: query
+          type: integer
+          required: true
+        - name: sidx
+          description: 排序字段
+          in: query
+          type: string
+        - name: order
+          description: 排序方式，如：asc、desc
+          in: query
+          type: string
+        - name: userName
+          description: 操作用户
+          in: query
+          type: string
+        - name: operationTime
+          description: 操作时间范围(使用,拼接)
+          in: query
+          type: string
+        - name: operationContent
+          description: 操作内容
+          in: query
+          type: string
+      responses:
+        '200':
+          description: 返回日志列表
+          schema:
+            $ref: '#/definitions/SysLogEntityList'
+  /biz/case/import:
+    post:
+      tags:
+        - 合同管理
+      summary: 导入合同
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: file
+          description: 文件
+          in: formData
+          type: file
+          required: true
+      responses:
+        '200':
+          description: 返回文件列表
+          schema:
+            $ref: '#/definitions/R'
+  /biz/case/list:
+    post:
+      tags:
+        - 合同管理
+      summary: 合同列表
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: page
+          description: 页码
+          in: query
+          type: integer
+          required: true
+        - name: limit
+          description: 每页条数
+          in: query
+          type: integer
+          required: true
+        - name: sidx
+          description: 排序字段
+          in: query
+          type: string
+        - name: order
+          description: 排序方式，如：asc、desc
+          in: query
+          type: string
+        - name: customerName
+          description: 客户名称
+          in: query
+          type: string
+        - name: caseDate
+          description: 操作时间范围(使用,拼接)
+          in: query
+          type: string
+        - name: caseNo
+          description: 案件编号
+          in: query
+          type: string
+      responses:
+        '200':
+          description: 返回合同列表
+          schema:
+            $ref: '#/definitions/BizCaseEntity'
+  /biz/case/save:
+    post:
+      tags:
+        - 合同管理
+      summary: 添加合同
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: body
+          description: 合同对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/BizCaseEntity'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+  /biz/case/info/{caseNo}:
+    post:
+      tags:
+        - 合同管理
+      summary: 合同详情
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: caseNo
+          description: 案件编号
+          in: path
+          type: string
+          schema:
+            $ref: '#/definitions/BizCaseEntity'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/BizCaseEntity'
+
+  /biz/case/update:
+    post:
+      tags:
+        - 合同管理
+      summary: 修改合同
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: body
+          description: 合同对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/BizCaseEntity'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+  /biz/case/deleteOne:
+    post:
+      tags:
+        - 合同管理
+      summary: 删除合同
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: caseNo
+          description: 合同ID
+          in: body
+          type: array
+          items:
+            type: integer
+            format: int64
+            default: 0
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+  /sys/user/import:
+    post:
+      tags:
+        - 用户管理
+      summary: 导入用户
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: files
+          description: 文件
+          in: formData
+          type: file
+          required: true
+      responses:
+        '200':
+          description: 返回文件列表
+          schema:
+            $ref: '#/definitions/R'
+  /sys/user/list:
+    post:
+      tags:
+        - 用户管理
+      summary: 用户列表
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: page
+          description: 页码
+          in: query
+          type: integer
+          required: true
+        - name: limit
+          description: 每页条数
+          in: query
+          type: integer
+          required: true
+        - name: sidx
+          description: 排序字段
+          in: query
+          type: string
+        - name: order
+          description: 排序方式，如：asc、desc
+          in: query
+          type: string
+        - name: realName
+          description: 用户名称
+          in: query
+          type: string
+        - name: department
+          description: 部门
+          in: query
+          type: string
+        - name: identity
+          description: 身份
+          in: query
+          type: string
+        - name: belongTeam
+          description: 归属团队
+          in: query
+          type: string
+        - name: mobNo
+          description: 手机号
+          in: query
+          type: string
+        - name: email
+          description: 邮箱
+          in: query
+          type: string
+      responses:
+        '200':
+          description: 返回用户列表
+          schema:
+            $ref: '#/definitions/SysUserEntity'
+  /sys/user/save:
+    post:
+      tags:
+        - 用户管理
+      summary: 添加用户
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: body
+          description: 用户对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/SysUserEntity'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+  /sys/user/info/{userId}:
+    post:
+      tags:
+        - 用户管理
+      summary: 用户详情
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: userId
+          description: 用户Id
+          in: header
+          type: string
+          schema:
+            $ref: '#/definitions/SysUserEntity'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/SysUserEntity'
+
+  /sys/user/update:
+    post:
+      tags:
+        - 用户管理
+      summary: 修改用户
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: body
+          description: 用户对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/SysUserEntity'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+  /sys/user/deleteOne:
+    post:
+      tags:
+        - 用户管理
+      summary: 删除用户
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: userId
+          description: 用户ID
+          in: body
+          type: array
+          items:
+            type: integer
+            format: int64
+            default: 0
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+  /team/set/list:
+    post:
+      tags:
+        - 团队设置
+      summary: 团队设置
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: page
+          description: 页码
+          in: query
+          type: integer
+          required: true
+        - name: limit
+          description: 每页条数
+          in: query
+          type: integer
+          required: true
+        - name: sidx
+          description: 排序字段
+          in: query
+          type: string
+        - name: order
+          description: 排序方式，如：asc、desc
+          in: query
+          type: string
+        - name: teamName
+          description: 团队名称
+          in: query
+          type: string
+        - name: teamCharge
+          description: 团队负责人
+          in: query
+          type: string
+        - name: isDeleted
+          description: 状态
+          in: query
+          type: string
+      responses:
+        '200':
+          description: 返回用户列表
+          schema:
+            $ref: '#/definitions/SysUserEntity'
+  /team/set/save:
+    post:
+      tags:
+        - 团队设置
+      summary: 添加团队
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: body
+          description: 团队对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/TeamSetEntity'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+  /team/set/info/{id}:
+    post:
+      tags:
+        - 团队设置
+      summary: 团队详情
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: id
+          description: 团队Id
+          in: header
+          type: string
+          schema:
+            $ref: '#/definitions/TeamSetEntity'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/TeamSetEntity'
+
+  /team/set/update:
+    post:
+      tags:
+        - 团队设置
+      summary: 修改团队
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: body
+          description: 团队对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/TeamSetEntity'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+  /team/set/deleteOne:
+    post:
+      tags:
+        - 团队设置
+      summary: 删除团队
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: id
+          description: 团队ID
+          in: body
+          type: array
+          items:
+            type: integer
+            format: int64
+            default: 0
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+  /user/office/list:
+    post:
+      tags:
+        - 办公室管理
+      summary: 办公室列表
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: page
+          description: 页码
+          in: query
+          type: integer
+          required: true
+        - name: limit
+          description: 每页条数
+          in: query
+          type: integer
+          required: true
+        - name: sidx
+          description: 排序字段
+          in: query
+          type: string
+        - name: order
+          description: 排序方式，如：asc、desc
+          in: query
+          type: string
+        - name: officeName
+          description: 办公室名称
+          in: query
+          type: string
+        - name: officePosition
+          description: 位置
+          in: query
+          type: string
+      responses:
+        '200':
+          description: 返回办公室列表
+          schema:
+            $ref: '#/definitions/UserOfficeEntity'
+  /user/office/save:
+    post:
+      tags:
+        - 办公室管理
+      summary: 添加办公室
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: body
+          description: 办公室对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/UserOfficeEntity'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+  /user/office/info/{officeNo}:
+    post:
+      tags:
+        - 办公室管理
+      summary: 办公室详情
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: officeNo
+          description: 办公室Id
+          in: header
+          type: string
+          schema:
+            $ref: '#/definitions/UserOfficeEntity'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/UserOfficeEntity'
+
+  /user/office/update:
+    post:
+      tags:
+        - 办公室管理
+      summary: 修改办公室
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: body
+          description: 办公室对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/UserOfficeEntity'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+  /user/office/deleteOne:
+    post:
+      tags:
+        - 办公室管理
+      summary: 删除办公室
+      produces:
+        - application/json
+      parameters:
+        - name: token
+          description: TOKEN
+          in: header
+          type: string
+          required: true
+        - name: officeNo
+          description: 办公室ID
+          in: body
+          type: array
+          items:
+            type: integer
+            format: int64
+            default: 0
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+
+
+#定义数据模型
+definitions:
+  R:
+      type: object
+      properties:
+        code:
+          description: 状态码 0：成功  非0：失败
+          type: integer
+          format: int32
+        msg:
+          description: 失败原因
+          type: string
+  Login:
+      type: object
+      properties:
+        code:
+          description: 状态码 0：成功  非0：失败
+          type: integer
+          format: int32
+        token:
+          description: token
+          type: string
+        expire:
+          description: 过期时长
+          type: integer
+          format: int32
+        msg:
+          description: 失败原因
+          type: string
+  SysLogEntityList:
+      type: object
+      properties:
+        code:
+          description: 状态码 0：成功  非0：失败
+          type: integer
+          format: int32
+        page:
+          type: object
+          properties:
+            totalCount:
+              description: 总记录数
+              type: integer
+              format: int32
+            pageSize:
+              description: 每页记录数
+              type: integer
+              format: int32
+            totalPage:
+              description: 总页数
+              type: integer
+              format: int32
+            currPage:
+              description: 当前页数
+              type: integer
+              format: int32
+            list:
+              type: array
+              items:
+                $ref: '#/definitions/SysLogEntity'
+  SysLogEntity:
+      type: object
+      properties:
+        id:
+          description: 日志ID
+          type: integer
+          format: int64
+        userName:
+          description: 操作用户
+          type: string
+        operationTime:
+          description: 操作时间
+          type: string
+          format: date-time
+        operationContent:
+          description: 操作内容
+          type: string
+        executePhase:
+          description: 执行时长(毫秒)
+          type: integer
+          format: int64
+        userIp:
+          description: IP地址
+          type: string
+  SysUserEntityList:
+    type: object
+    properties:
+      code:
+        description: 状态码 0：成功  非0：失败
+        type: integer
+        format: int32
+      page:
+        type: object
+        properties:
+          totalCount:
+            description: 总记录数
+            type: integer
+            format: int32
+          pageSize:
+            description: 每页记录数
+            type: integer
+            format: int32
+          totalPage:
+            description: 总页数
+            type: integer
+            format: int32
+          currPage:
+            description: 当前页数
+            type: integer
+            format: int32
+          list:
+            type: array
+            items:
+              $ref: '#/definitions/SysUserEntity'
+  SysUserEntity:
+    type: object
+    properties:
+      userId:
+        description: 用户ID
+        type: integer
+        format: int64
+      username:
+        description: 用户名
+        type: string
+      password:
+        description: 密码
+        type: string
+      email:
+        description: 邮箱
+        type: string
+      mobile:
+        description: 手机号
+        type: string
+      status:
+        description: 状态  0：禁用   1：正常
+        type: integer
+        format: int32
+      roleIdList:
+        description: 角色ID列表
+        type: array
+        items:
+          type: integer
+          format: int64
+      createUserId:
+        description: 创建者ID
+        type: integer
+        format: int64
+      createTime:
+        description: 创建时间
+        type: string
+        format: date-time
