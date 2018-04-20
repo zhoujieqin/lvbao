@@ -1,4 +1,4 @@
-package com.ater.lvbao.config;
+package com.ater.lvbao.common.oauth2;
 
 import com.ater.lvbao.common.oauth2.OAuth2Filter;
 import com.ater.lvbao.common.oauth2.OAuth2Realm;
@@ -54,16 +54,16 @@ public class ShiroConfig {
         shiroFilter.setFilters(filters);
         //例外
         Map<String, String> filterMap = new LinkedHashMap<>();
-        filterMap.put("/webjars/**", "anon");
-        filterMap.put("/druid/**", "anon");
-        filterMap.put("/app/**", "anon");
-        filterMap.put("/sys/login", "anon");
-        filterMap.put("/swagger/**", "anon");
-        filterMap.put("/v2/api-docs", "anon");
-        filterMap.put("/swagger-ui.html", "anon");
-        filterMap.put("/swagger-resources/**", "anon");
+//        filterMap.put("/webjars/**", "anon");
+//        filterMap.put("/druid/**", "anon");
+//        filterMap.put("/app/**", "anon");
+//        filterMap.put("/sys/login", "anon");
+//        filterMap.put("/swagger/**", "anon");
+//        filterMap.put("/v2/api-docs", "anon");
+//        filterMap.put("/swagger-ui.html", "anon");
+//        filterMap.put("/swagger-resources/**", "anon");
         filterMap.put("/", "anon");
-        filterMap.put("/**", "oauth2");
+//        filterMap.put("/**", "oauth2");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 
         return shiroFilter;

@@ -3,10 +3,9 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: com.mysql.jdbc.Driver
         druid:
-            url: jdbc:mysql://127.0.0.1:3306/ledger-dev?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
-#            url: jdbc:mysql://183.6.167.226:3306/ledger-dev?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+            url: jdbc:mysql://127.0.0.1:3306/lvbao-dev?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
             username: root
-            password: 1234
+            password: password
             initial-size: 10
             max-active: 100
             min-idle: 10

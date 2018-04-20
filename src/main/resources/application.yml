@@ -13,7 +13,7 @@ server:
         min-spare-threads: 30
     port: 8088
     connection-timeout: 5000
-    context-path: /demo
+    context-path: /lvbao
 
 spring:
     # 环境 dev|test|pro
@@ -32,6 +32,8 @@ spring:
         static-locations: classpath:/static/,classpath:/resources,file:${upload_dir}
     mvc:
         static-path-pattern: /resources/**
+    jpa:
+        show-sql: false
     redis:
         open: true  # 是否开启redis缓存
         database: 0
