@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.kafeitu.me/demo/activiti/leave" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.kafeitu.me/demo/activiti/leave" id="m1524202816755" name="">
+  <process id="leave2" name="请假流程-外置表单" isExecutable="true" isClosed="false" processType="None">
+    <documentation>请假流程演示</documentation>
+    <startEvent id="startevent1" name="Start" activiti:initiator="applyUserId" activiti:formKey="start.form"></startEvent>
+    <userTask id="deptLeaderAudit" name="部门领导审批" activiti:assignee="zhoujq" activiti:formKey="processes/dept-leader-audit.form">
+      <extensionElements>
+        <activiti:formProperty id="caseNo" name="案件编号" type="string" variable="caseNo" default="12345"></activiti:formProperty>
+        <activiti:formProperty id="caseName" name="案件名称" type="string" variable="V案件名称" default="案件名称"></activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <exclusiveGateway id="exclusivegateway5" name="Exclusive Gateway"></exclusiveGateway>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="flow2" sourceRef="startevent1" targetRef="deptLeaderAudit"></sequenceFlow>
+    <sequenceFlow id="flow3" sourceRef="deptLeaderAudit" targetRef="exclusivegateway5"></sequenceFlow>
+    <sequenceFlow id="flow14" sourceRef="exclusivegateway5" targetRef="startevent1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${deptLeaderPass == false}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow15" sourceRef="exclusivegateway5" targetRef="endevent1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${deptLeaderPass == true}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_leave2">
+    <bpmndi:BPMNPlane bpmnElement="leave2" id="BPMNPlane_leave2">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="10.0" y="90.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="deptLeaderAudit" id="BPMNShape_deptLeaderAudit">
+        <omgdc:Bounds height="55.0" width="105.0" x="90.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway5" id="BPMNShape_exclusivegateway5">
+        <omgdc:Bounds height="40.0" width="40.0" x="250.0" y="87.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="400.0" y="90.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="45.0" y="107.0"></omgdi:waypoint>
+        <omgdi:waypoint x="90.0" y="107.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="195.0" y="107.0"></omgdi:waypoint>
+        <omgdi:waypoint x="250.0" y="107.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+        <omgdi:waypoint x="270.0" y="87.0"></omgdi:waypoint>
+        <omgdi:waypoint x="269.0" y="42.0"></omgdi:waypoint>
+        <omgdi:waypoint x="27.0" y="42.0"></omgdi:waypoint>
+        <omgdi:waypoint x="27.0" y="90.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
+        <omgdi:waypoint x="290.0" y="107.0"></omgdi:waypoint>
+        <omgdi:waypoint x="400.0" y="107.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

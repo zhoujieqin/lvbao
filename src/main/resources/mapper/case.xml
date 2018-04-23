@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ater.lvbao.modules.caseT.CaseDao">
+
+	
+	<select id="queryList" resultType="com.ater.lvbao.modules.caseT.CaseEntity">
+		select * from caseT
+		<where>
+			<if test="caseNo != null and caseNo.trim() != ''">
+				and FIND_IN_SET(`caseNo`,#{caseNo})
+			</if>	
+		</where>
+		
+	</select>
+	
+	<select id="queryObject" resultType="com.ater.lvbao.modules.caseT.CaseEntity">
+		select * from caseT where caseNo = #{value}
+	</select>
+
+ 	
+	<insert id="save" parameterType="com.ater.lvbao.modules.caseT.CaseEntity">
+		insert into caseT
+		(
+			`caseNo`,
+			`caseName`,
+			`userId`,
+			`processInstanceId`
+		)
+		values
+		(
+			#{caseNo},
+			#{caseName},
+			#{userId},
+			#{processInstanceId}
+		)
+	</insert>
+
+</mapper>
